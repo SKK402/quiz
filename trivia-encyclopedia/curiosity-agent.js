@@ -147,57 +147,7 @@ function isFuzzyDuplicate(factA, existingFacts) {
 // ============================================
 
 /**
- * Source 1: Wikipedia Random Articles
- * Fetches random article summaries and extracts interesting facts
- */
-async function fetchWikipediaRandomFacts(count = 5, onStep) {
-    const facts = []
-
-    for (let i = 0; i < count; i++) {
-        onStep?.({ label: `🌐 Wikipedia: Exploring random article ${i + 1}/${count}...` })
-
-        try {
-            const resp = await fetch('https://en.wikipedia.org/api/rest_v1/page/random/summary', {
-                headers: { 'Api-User-Agent': 'TriviaEncyclopedia/1.0' }
-            })
-            if (!resp.ok) continue
-
-            const article = await resp.json()
-
-            // Skip non-interesting articles
-            if (!article.extract || article.extract.length < 60) continue
-            if (!isInteresting(article.extract)) continue
-            if (article.type === 'disambiguation') continue
-
-            const interestingness = calculateInterestingness(article.extract + ' ' + article.title)
-
-            // Only keep facts that score above 60 (meaningfully interesting)
-            if (interestingness >= 55) {
-                facts.push({
-                    title: article.title,
-                    body: article.extract,
-                    year: extractYear(article.extract),
-                    tags: ['Wikipedia', 'Discovery'],
-                    wowScore: interestingness,
-                    sources: [{ name: 'Wikipedia', url: article.content_urls?.desktop?.page || 'https://wikipedia.org' }],
-                    _source: 'wikipedia-random',
-                    _live: true,
-                    _thumbnail: article.thumbnail?.source || null,
-                })
-            }
-
-            // Small delay between requests
-            await sleep(200)
-        } catch (err) {
-            // continue to next
-        }
-    }
-
-    return facts
-}
-
-/**
- * Source 2: Wikipedia "On This Day" events
+ * Source 1: Wikipedia "On This Day" events
  */
 async function fetchOnThisDayFacts(onStep) {
     onStep?.({ label: '📅 Fetching "On This Day" historical events...' })
@@ -370,12 +320,6 @@ export async function runCuriosityAgent(onStep = () => { }) {
 
     allFacts.push(...triviaFacts)
     report.sources.push({ name: 'Trivia DB', count: triviaFacts.length })
-
-    // Step 2: Fetch Wikipedia random articles (sequential due to API limits)
-    onStep({ phase: 'fetch', step: 2, label: '🌐 Step 2: Exploring Wikipedia for hidden gems...' })
-    const wikiRandomFacts = await fetchWikipediaRandomFacts(8, onStep)
-    allFacts.push(...wikiRandomFacts)
-    report.sources.push({ name: 'Wikipedia Random', count: wikiRandomFacts.length })
 
     report.totalFetched = allFacts.length
 

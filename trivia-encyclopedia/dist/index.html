@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trivia Encyclopedia — Discover Fascinating Facts</title>
+  <meta name="description"
+    content="An interactive trivia encyclopedia covering Sports Records, Animal Facts, Space Exploration, and Technology Breakthroughs. Explore curated fascinating facts." />
+  <meta property="og:title" content="Trivia Encyclopedia" />
+  <meta property="og:description" content="Discover fascinating facts across Sports, Animals, Space, and Technology." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
+  <script type="module" crossorigin src="/assets/index-DgM3Hk_C.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-DhMdCZVJ.css">
+</head>
+
+<body>
+  <!-- Animated Background -->
+  <canvas id="particles-canvas"></canvas>
+  <div class="gradient-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app">
+    <!-- Navigation -->
+    <nav id="navbar" class="navbar">
+      <div class="nav-content">
+        <button id="nav-brand" class="nav-brand" aria-label="Go to home">
+          <span class="nav-logo">🧠</span>
+          <span class="nav-title">Trivia Encyclopedia</span>
+        </button>
+        <div class="nav-actions">
+          <button id="favorites-filter-btn" class="favorites-filter" aria-label="Show favorites">
+            <span>❤️</span>
+            <span>Favorites</span>
+            <span class="favorites-count" id="favorites-count">0</span>
+          </button>
+          <button id="quiz-nav-btn" class="btn btn-quiz" aria-label="Take a quiz">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
+            </svg>
+            <span>Quiz</span>
+          </button>
+          <button id="random-fact-btn" class="btn btn-glow" aria-label="Show random fact">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22" />
+              <path d="m18 2 4 4-4 4" />
+              <path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2" />
+              <path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8" />
+              <path d="m18 14 4 4-4 4" />
+            </svg>
+            <span>Random Fact</span>
+          </button>
+          <div class="search-wrapper" id="search-wrapper">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.3-4.3" />
+            </svg>
+            <input type="text" id="search-input" class="search-input" placeholder="Search facts..."
+              autocomplete="off" />
+          </div>
+
+          <!-- Auth -->
+          <button id="auth-btn" class="btn btn-auth" aria-label="Sign in with Google">
+            <svg width="18" height="18" viewBox="0 0 24 24">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                fill="#4285F4" />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853" />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                fill="#FBBC05" />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335" />
+            </svg>
+            <span>Sign In</span>
+          </button>
+          <div id="user-profile" class="user-profile hidden">
+            <img id="user-avatar" class="user-avatar hidden" src="" alt="Avatar" />
+            <span id="user-name" class="user-name"></span>
+            <button id="auth-logout-btn" class="btn btn-logout" aria-label="Sign out" title="Sign out">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero / Landing -->
+    <section id="landing-view" class="view landing-view active">
+      <header class="hero">
+        <h1 class="hero-title">
+          <span class="hero-line hero-line-1">Discover</span>
+          <span class="hero-line hero-line-2">Fascinating</span>
+          <span class="hero-line hero-line-3">Facts</span>
+        </h1>
+        <p class="hero-subtitle">Explore curated trivia across fifteen incredible domains of knowledge</p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number" id="total-facts-count">0</span>
+            <span class="stat-label">Facts</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-number">15</span>
+            <span class="stat-label">Categories</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-number">∞</span>
+            <span class="stat-label">Wonder</span>
+          </div>
+        </div>
+
+        <!-- Realtime Indicator (visible when signed in) -->
+        <div class="realtime-bar" id="realtime-bar">
+          <div class="live-indicator" id="live-indicator">
+            <span class="live-dot"></span>
+            <span class="live-text">LIVE</span>
+          </div>
+          <button class="refresh-trivia-btn hidden" id="refresh-trivia-btn" aria-label="Refresh facts"
+            title="Refresh facts from server">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6" />
+              <path d="M2.5 22v-6h6" />
+              <path d="M2 11.5a10 10 0 0 1 18.8-4.3" />
+              <path d="M22 12.5a10 10 0 0 1-18.8 4.2" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Daily Fact Banner -->
+      <div class="daily-fact-banner" id="daily-fact-banner">
+        <!-- Injected by JS -->
+      </div>
+
+      <div class="categories-grid" id="categories-grid">
+        <!-- Cards injected by JS -->
+      </div>
+    </section>
+
+    <!-- Category Detail View -->
+    <section id="category-view" class="view category-view">
+      <div class="category-hero" id="category-hero">
+        <div class="category-hero-overlay"></div>
+        <img id="category-hero-img" class="category-hero-img" src="" alt="" />
+        <div class="category-hero-content">
+          <button id="back-btn" class="btn btn-back" aria-label="Go back">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 19-7-7 7-7" />
+              <path d="M19 12H5" />
+            </svg>
+            <span>Back</span>
+          </button>
+          <span class="category-icon" id="category-icon"></span>
+          <h2 class="category-title" id="category-title"></h2>
+          <p class="category-desc" id="category-desc"></p>
+          <div class="category-meta">
+            <span class="category-count" id="category-count"></span>
+          </div>
+        </div>
+      </div>
+      <div class="facts-container" id="facts-container">
+        <!-- Fact cards injected by JS -->
+      </div>
+    </section>
+
+    <!-- Quiz View -->
+    <section id="quiz-view" class="view quiz-view">
+      <div class="quiz-container">
+        <button id="quiz-back-btn" class="btn btn-back quiz-back" aria-label="Go back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7" />
+            <path d="M19 12H5" />
+          </svg>
+          <span>Back</span>
+        </button>
+
+        <!-- Quiz Intro -->
+        <div id="quiz-intro" class="quiz-intro">
+          <div class="quiz-intro-icon">🧠</div>
+          <h2 class="quiz-intro-title">Trivia Challenge</h2>
+          <p class="quiz-intro-desc">Test your knowledge across all categories. Customize your quiz below!</p>
+
+          <!-- Quiz Settings -->
+          <div class="quiz-settings">
+            <div class="quiz-setting-group">
+              <span class="quiz-setting-label">Difficulty</span>
+              <div class="quiz-setting-options" id="quiz-difficulty-options">
+                <button class="quiz-setting-btn selected" data-value="all">All</button>
+                <button class="quiz-setting-btn" data-value="easy">🟢 Easy</button>
+                <button class="quiz-setting-btn" data-value="medium">🟡 Medium</button>
+                <button class="quiz-setting-btn" data-value="hard">🔴 Hard</button>
+              </div>
+            </div>
+            <div class="quiz-setting-group">
+              <span class="quiz-setting-label">Category</span>
+              <select class="quiz-category-select" id="quiz-category-select">
+                <option value="all">All Categories</option>
+              </select>
+            </div>
+            <div class="quiz-setting-group">
+              <span class="quiz-setting-label">Questions</span>
+              <div class="quiz-setting-options" id="quiz-count-options">
+                <button class="quiz-setting-btn" data-value="5">5</button>
+                <button class="quiz-setting-btn" data-value="10">10</button>
+                <button class="quiz-setting-btn selected" data-value="15">15</button>
+                <button class="quiz-setting-btn" data-value="25">25</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="quiz-intro-stats">
+            <div class="quiz-stat"><span class="quiz-stat-num" id="quiz-stat-count">15</span><span
+                class="quiz-stat-label">Questions</span></div>
+            <div class="quiz-stat"><span class="quiz-stat-num" id="quiz-stat-timer">60s</span><span
+                class="quiz-stat-label">Per Question</span></div>
+            <div class="quiz-stat"><span class="quiz-stat-num">🎯</span><span class="quiz-stat-label">Accuracy</span>
+            </div>
+          </div>
+          <button id="quiz-start-btn" class="btn btn-glow btn-lg">Start Quiz →</button>
+        </div>
+
+        <!-- Quiz Progress Bar -->
+        <div id="quiz-progress" class="quiz-progress">
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+          </div>
+          <div class="quiz-progress-info">
+            <span id="quiz-progress-text">Question 1 of 15</span>
+            <span id="quiz-score-display">⭐ 0 pts</span>
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div id="quiz-timer-bar" class="quiz-timer-bar">
+          <div class="quiz-timer-fill" id="quiz-timer-fill"></div>
+          <span class="quiz-timer-text" id="quiz-timer">60s</span>
+        </div>
+
+        <!-- Question Area -->
+        <div id="quiz-question-area" class="quiz-question-area hidden">
+          <div class="quiz-question-header">
+            <p class="quiz-hint hidden" id="quiz-hint"></p>
+            <button id="quiz-hint-btn" class="btn btn-hint" title="Use hint (-3 pts)">💡 Hint</button>
+            <div id="quiz-streak-display" class="quiz-streak hidden">🔥 <span id="quiz-streak-count">0</span> streak
+            </div>
+          </div>
+          <h2 class="quiz-question-text" id="quiz-question-text"></h2>
+          <div class="quiz-options" id="quiz-options"></div>
+        </div>
+
+        <!-- Emoji Reaction -->
+        <div id="quiz-emoji-reaction" class="quiz-emoji-reaction hidden"></div>
+
+        <!-- Wrong answer feedback -->
+        <div id="quiz-correct-answer" class="quiz-correct-answer-text hidden"></div>
+
+        <!-- Explanation -->
+        <div id="quiz-explanation-area" class="quiz-explanation-area hidden">
+          <div class="quiz-explanation-card">
+            <h3 class="quiz-explanation-title" id="quiz-explanation-title"></h3>
+            <div class="quiz-explanation-tags" id="quiz-explanation-tags"></div>
+            <div class="quiz-explanation-divider"></div>
+            <p class="quiz-explanation-body" id="quiz-explanation-body"></p>
+            <div class="quiz-explanation-sources" id="quiz-explanation-sources"></div>
+          </div>
+        </div>
+
+        <!-- Next Button -->
+        <button id="quiz-next-btn" class="btn btn-glow btn-lg quiz-next hidden">Next Question →</button>
+
+        <!-- Results -->
+        <div id="quiz-results" class="quiz-results hidden">
+          <div class="quiz-results-card">
+            <h2 class="quiz-results-title">Quiz Complete!</h2>
+            <div class="quiz-results-score" id="quiz-final-score">0/15</div>
+            <div class="quiz-results-pct" id="quiz-final-pct">0%</div>
+            <div class="quiz-results-grade" id="quiz-grade">🌱 Rookie!</div>
+            <button id="quiz-restart-btn" class="btn btn-glow btn-lg">Play Again →</button>
+
+            <!-- Leaderboard -->
+            <div class="quiz-leaderboard" id="quiz-leaderboard">
+              <h3 class="quiz-leaderboard-title">🏆 Global Leaderboard</h3>
+              <div class="quiz-leaderboard-list" id="quiz-leaderboard-list"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Results View -->
+    <section id="search-view" class="view search-view">
+      <div class="search-results-header">
+        <button id="search-back-btn" class="btn btn-back" aria-label="Go back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7" />
+            <path d="M19 12H5" />
+          </svg>
+          <span>Back</span>
+        </button>
+        <h2 class="search-results-title">Search Results for "<span id="search-query-display"></span>"</h2>
+        <span class="search-results-count" id="search-results-count"></span>
+      </div>
+      <div class="facts-container" id="search-results-container">
+        <!-- Search result cards injected by JS -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Fact Detail Side Panel -->
+  <div id="fact-panel-backdrop" class="fact-panel-backdrop"></div>
+  <aside id="fact-panel" class="fact-panel" aria-hidden="true">
+    <div class="fact-panel-inner">
+      <!-- Close button -->
+      <button id="fact-panel-close" class="fact-panel-close" aria-label="Close panel">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+
+      <!-- Score ring -->
+      <div class="fact-panel-score" id="fact-panel-score">
+        <svg class="score-ring" viewBox="0 0 80 80">
+          <circle class="score-ring-bg" cx="40" cy="40" r="35" />
+          <circle class="score-ring-fill" id="score-ring-fill" cx="40" cy="40" r="35" />
+        </svg>
+        <div class="score-label">
+          <span class="score-value" id="score-value">95</span>
+          <span class="score-text">WOW</span>
+        </div>
+      </div>
+
+      <!-- Title & Category -->
+      <h2 class="fact-panel-title" id="fact-panel-title"></h2>
+      <p class="fact-panel-subtitle" id="fact-panel-subtitle"></p>
+
+      <!-- Tags -->
+      <div class="fact-panel-tags" id="fact-panel-tags"></div>
+
+      <!-- Divider -->
+      <div class="fact-panel-divider"></div>
+
+      <!-- Body -->
+      <p class="fact-panel-body" id="fact-panel-body"></p>
+
+      <!-- Year -->
+      <div class="fact-panel-year-row" id="fact-panel-year-row">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="12 6 12 12 16 14" />
+        </svg>
+        <span id="fact-panel-year"></span>
+      </div>
+
+      <!-- Source Links -->
+      <div class="fact-panel-sources" id="fact-panel-sources"></div>
+
+      <!-- Actions -->
+      <div class="fact-panel-actions">
+        <button id="fact-panel-favorite" class="fact-panel-favorite" aria-label="Favorite">
+          <span class="heart-icon">🤍</span>
+          <span class="fav-text">Favorite</span>
+        </button>
+        <button id="fact-panel-share" class="btn btn-panel" aria-label="Share fact">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3" />
+            <circle cx="6" cy="12" r="3" />
+            <circle cx="18" cy="19" r="3" />
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+          </svg>
+        </button>
+        <button id="fact-panel-close-bottom" class="btn btn-panel-close">Close</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Random Fact Modal -->
+  <div id="random-fact-modal" class="modal-overlay">
+    <div class="modal" id="random-fact-content">
+      <button id="modal-close-btn" class="modal-close" aria-label="Close modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6 6 18" />
+          <path d="m6 6 12 12" />
+        </svg>
+      </button>
+      <div class="modal-badge" id="modal-badge">Did you know?</div>
+      <h3 class="modal-title" id="modal-fact-title"></h3>
+      <p class="modal-body" id="modal-fact-body"></p>
+      <div class="modal-footer">
+        <span class="modal-category" id="modal-fact-category"></span>
+        <button id="modal-next-btn" class="btn btn-glow btn-sm">Next Fact →</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
